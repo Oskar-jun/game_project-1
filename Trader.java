@@ -4,8 +4,8 @@ public class Trader extends Humanoid{
 	//0-head, 1-top, 2-gloves, 3-bottom, 4-boots
 	private Clothing[] weared = new Clothing[5];
 	
-	public Trader(String name, Item[] inventory, Skill[] skills){
-		super (name, inventory, skills);
+	public Trader(String name, Item[] inventory, Skill[] skills, int position){
+		super (name, inventory, skills, position);
 	}
 	
 	public Item[] trade(Player currentPlayer){
@@ -18,8 +18,6 @@ public class Trader extends Humanoid{
 						String tradeBeginning = scanner.next();
 						switch (tradeBeginning){
 							case("E"):
-								tradeDone = false;
-								break;
 							case("e"):
 								tradeDone = false;
 								break;
@@ -39,7 +37,7 @@ public class Trader extends Humanoid{
 				if (((choice-1<24)&&(choice-1>=0))&&(traderInventory[choice-1]!=null)){
 					if (traderInventory[choice-1].getAmount()>=amount){
 						System.out.println("This will cost you "+amount*traderInventory[choice-1].getPrice()+".");
-						if (currentPlayer.addMoney(amount*traderInventory[choice-1].getPrice()*(-1))){
+						if (currentPlayer.spendMoney(amount*traderInventory[choice-1].getPrice()*(-1))){
 							currentPlayer.takeItem(new Item (traderInventory[choice-1].getRarity(), traderInventory[choice-1].getName(), traderInventory[choice-1].getPrice(), amount));
 							if (traderInventory[choice-1].getAmount()==amount){
 								traderInventory[choice-1]=null;
@@ -51,8 +49,6 @@ public class Trader extends Humanoid{
 							String tradeContinue = scanner.next();
 							switch (tradeContinue){
 								case("E"):
-									tradeDone = true;
-									break;
 								case("e"):
 									tradeDone = true;
 									break;

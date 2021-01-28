@@ -1,3 +1,5 @@
-public class Grasssland extends Terrain{
-	
+public class Grassland extends Terrain{
+	public Grassland(){
+		super(false);
+	}
 }

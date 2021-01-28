@@ -1,3 +1,5 @@
 public class River extends Terrain{
-	Item requiredToLoot;
+	public River(){
+		super(false);
+	}
 }

@@ -1,3 +1,5 @@
 public class Forest extends Terrain{
-	Item requiredToLoot;
+	public Forest(int plankAmount){
+		super(true, true, new Axe(), new Plank(plankAmount));
+	}
 }

@@ -5,6 +5,7 @@ public class Humanoid extends Entity{
 	private int health;
 	private int mana;
 	private int money;
+	private int xp;
 	private int level;
 	private int currentPosition=0;
 	private Item[] inventory = new Item[24];
@@ -12,67 +13,97 @@ public class Humanoid extends Entity{
 	private Skill[] skills = new Skill[5];
 	private boolean isDead=false;
 	
-	public Humanoid(String name, Item[] inventory, Skill[] skills){
+	//Here are constructors
+	
+	public Humanoid(String name, Item[] inventory, Skill[] skills, int position){
 		this.name = name;
 		this.health = 100;
 		this.mana = 100;
 		this.money = 100;
 		this.inventory = inventory;
 		this.skills = skills;
+		this.currentPosition=position;
 	}
 	
-	public Humanoid(String name, int money, Item[] inventory, Skill[] skills){
+	public Humanoid(String name, int money, Item[] inventory, Skill[] skills, int position){
 		this.name = name;
 		this.health = 100;
 		this.mana = 100;
 		this.money = money;
 		this.inventory = inventory;
 		this.skills = skills;
+		this.currentPosition=position;
 	}
 	
-	public void heal(int amount){
-		if ((100+skills[0].toInt())>(this.health+amount)){
-			this.health+=amount;
-			System.out.println ("Current health is "+ this.health);
-		}else{
-			this.health=100+skills[0].toInt();
-		}
+	//Here is the block of getters
+	
+	public int getPosition(){
+		return this.currentPosition;
 	}
 	
+	public int getMoney(){
+		return this.money;
+	}
+	
+	public String getName(){
+		return this.name;
+	}
+	
+	public int getSkill(int index){
+		return skills[index].toInt();
+	}
+	
+	public Item[] getInventory(){
+		return this.inventory;
+	}
+	
+	//Here will be setters
+	
+	public void setInventory(Item[] inventory){
+		this.inventory=inventory;
+	}
+	
+	public void setPosition(int index){
+		this.currentPosition=index;
+	}
+	
+	//Here will be all other functions responsible for interaction with the world
+	
+	//takeDamage, spendMana and spendMoney are responsible for healing and refilling as well
 	public void takeDamage(int amount){
+		if (amount<0) System.out.println("Gained "+amount+" health");
 		if ((this.health-amount)>0){
 			this.health-=amount;
-			System.out.println (this.name +" took that damage "+ amount);
 		}else{
 			this.die();
 		}
 	}
 	
-	public void getMana(int amount){
-		if ((100+skills[1].toInt())>(this.mana+amount)){
-			this.mana+=amount;
-			System.out.println ("Current mana is "+ this.mana);
+	public boolean spendMana(int amount){
+		if (amount<0) System.out.println("Gained "+amount+" mana");
+		if ((this.mana-amount)>0){
+			this.mana-=amount;	
+			return true;
 		}else{
-			this.mana=100+skills[1].toInt();
+			System.out.println("Not enough mana");
+			return false;
 		}
 	}
 	
-	public void spendMana(int amount){
-		if ((this.mana-amount)>0){
-			this.mana-=amount;
-			System.out.println ("Current mana is "+ this.mana);			
+	public boolean spendMoney(int amount){
+		if (this.money-amount>=0){
+			this.money-=amount;
+			System.out.println(this.name+"'s wallet contains "+this.money+" now.");
+			return true;
 		}else{
-			System.out.println("Not enough mana");
+			System.out.println(this.name+"'s funds are unsufficient");
+			return false;
 		}
 	}
 	
 	public void upgradeSkill(int index, int points){
 		if ((index>=0)&&(index<4)) skills[index].upgrade(points);
 		System.out.println(skills[index].toString());
-	}
-	
-	public int getSkill(int index){
-		return skills[index].toInt();
 	}
 	
 	public void takeItem(Item loot, int amount){
@@ -92,42 +123,11 @@ public class Humanoid extends Entity{
 		}
 	}
 	
-	public Item[] getInventory(){
-		return this.inventory;
-	}
-	
-	public void setInventory(Item[] inventory){
-		this.inventory=inventory;
-	}
-	
-	public int getPosition(){
-		return this.currentPosition;
-	}
-	
-	public int getMoney(){
-		return this.money;
-	}
-	
-	public boolean addMoney(int amount){
-		if (this.money+amount>=0){
-			this.money+=amount;
-			System.out.println(this.name+"'s wallet contains "+this.money+" now.");
-			return true;
-		}else{
-			System.out.println(this.name+"'s funds are unsufficient");
-			return false;
-		}
-	}
-	
-	public void setPosition(int index){
-		this.currentPosition=index;
-	}
-	
 	public int move(int moveIndex){
 		if ((moveIndex<0)&&((this.currentPosition+moveIndex)<0)){
-			moveIndex=129;
-		}else if ((moveIndex>0)&&((this.currentPosition+moveIndex)>143)){
-			moveIndex=-129;
+			moveIndex=130;
+		}else if ((moveIndex>0)&&((this.currentPosition+moveIndex)>=143)){
+			moveIndex=-130;
 		}
 		this.currentPosition+=moveIndex;
 		return this.currentPosition;
@@ -141,10 +141,10 @@ public class Humanoid extends Entity{
 					this.takeDamage((int)(Math.random()*(currentEnemy.getSkill(2)))+10);
 					break;
 				case(1):
-					System.out.println("Enemy missed.");
+					System.out.println(currentEnemy.getName()+" missed.");
 					break;
 				case(2):
-					System.out.println("Enemy missed CRITICALLY.");
+					System.out.println(currentEnemy.getName()+" missed CRITICALLY.");
 					currentEnemy.takeDamage((int)(Math.random()*(currentEnemy.getSkill(2)))+10);
 					break;
 				//3-5 player act
@@ -152,15 +152,19 @@ public class Humanoid extends Entity{
 					currentEnemy.takeDamage((int)(Math.random()*(this.getSkill(2)))+15);
 					break;
 				case(4):
-					System.out.println("You missed.");
+					System.out.println(this.getName()+" missed.");
 					break;
 				case(5):
-					System.out.println("You missed CRITICALLY.");
+					System.out.println(this.getName()+" missed CRITICALLY.");
 					this.takeDamage((int)(Math.random()*(this.getSkill(2)))+15);
 					break;
 			}
 		}
-		if (currentEnemy.checkIfDead()) worldLayer[currentEnemy.getPosition()]=null;
+		if (currentEnemy.checkIfDead()){ 
+			worldLayer[currentEnemy.getPosition()]=null;
+		}else{
+			worldLayer[this.getPosition()]=null;
+		}
 		return worldLayer;
 	}
 	
