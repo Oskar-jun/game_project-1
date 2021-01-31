@@ -1,0 +1,10 @@
+Orge
+Goblin
+Orc
+Giant
+Troll
+Huldra
+Highwayman
+Bandit
+Thief
+Madman

@@ -12,9 +12,9 @@ public class Skill{
 		this.level=0;
 	}
 	
-	public void upgrade(int points){
+	public boolean upgrade(int points){
 		this.level+=points;
-		System.out.println("Done it");
+		return true;
 	}
 	
 	public int toInt(){

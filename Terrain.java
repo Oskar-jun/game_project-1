@@ -41,4 +41,8 @@ public class Terrain{
 		this.isHabitable=false;
 		this.habitants=null;
 	}
+
+	public Item loot(){
+		return this.possibleLoot;
+	}
 }

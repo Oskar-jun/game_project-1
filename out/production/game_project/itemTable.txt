@@ -1,0 +1,11 @@
+0 Knife 5
+1 Sword 10
+2 Greatsword 15
+0 Hat 0 2
+0 Shirt 1 2
+0 Pants 2 2
+0 Boots 3 1
+2 Helmet 0 3
+2 Chestplate 1 4
+2 Chausses 2 3
+2 Steel-toes 3 2
